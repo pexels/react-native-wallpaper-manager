@@ -95,8 +95,8 @@ public class WallPaperManager extends ReactContextBaseJavaModule {
             sendMessage("error","CurrentActivity is null",source);
         }
 
-        //handle base64
-        if ("data:image/png;base64,".startsWith(source)){
+        // handle base64
+        if (source.startsWith("data:image/png;base64,") || source.startsWith("data:image/jpeg;base64,")){
             mCurrentActivity.runOnUiThread(new Runnable() {
                 public void run() {
                     ThreadUtil.assertMainThread();
