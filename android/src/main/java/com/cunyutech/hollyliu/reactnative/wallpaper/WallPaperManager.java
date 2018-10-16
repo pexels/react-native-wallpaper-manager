@@ -11,6 +11,7 @@ import android.graphics.PixelFormat;
 import android.app.Activity;
 import android.app.WallpaperManager;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.model.GlideUrl;
@@ -223,16 +224,22 @@ public class WallPaperManager extends ReactContextBaseJavaModule {
             @Override
             public void onResourceReady(byte[] resource, GlideAnimation<? super byte[]> glideAnimation) {
                 Bitmap bitmap = BitmapFactory.decodeByteArray(resource, 0, resource.length);
-                try
-                {
-                    wallpaperManager.setBitmap(bitmap);
-                    sendMessage("success","Set Wallpaper Success",source);
-                }
-                catch (Exception e)
-                {
-                    sendMessage("error","Exception in SimpleTarget：" + e.getMessage(),source);
-                    return;
-                }
+
+                new AsyncTask<Bitmap, Void, Boolean>() {
+                  @Override
+                  protected Boolean doInBackground(Bitmap... bmps) {
+                    try {
+                      wallpaperManager.setBitmap(bmps[0]);
+                      sendMessage("success", "Set Wallpaper Success", source);
+                    } catch (Exception e) {
+                      sendMessage("error", "Exception in SimpleTarget：" + e.getMessage(), source);
+                      return false;
+                    }
+                    return true;
+                  }
+                }.execute(bitmap);
+
+                return;
             }
 
             @Override
