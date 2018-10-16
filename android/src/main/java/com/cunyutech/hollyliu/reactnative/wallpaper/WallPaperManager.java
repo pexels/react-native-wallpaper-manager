@@ -238,6 +238,8 @@ public class WallPaperManager extends ReactContextBaseJavaModule {
                     return true;
                   }
                 }.execute(bitmap);
+
+                return;
             }
 
             @Override
